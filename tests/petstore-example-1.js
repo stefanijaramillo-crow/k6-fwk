@@ -7,7 +7,7 @@ export const options = {
         // Define un escenario llamado "user_api"
         user_api: {
             executor: 'constant-arrival-rate', // Usa un flujo constante de solicitudes por segundo
-            rate: 1,                           // 1 petición por unidad de tiempo
+            rate: 1,                           // 1 petición por unidad de tiempo (cantidad de usuarios)
             timeUnit: '1s',                    // La unidad de tiempo es 1 segundo
             duration: '10s',                   // Ejecuta este ritmo durante 10 segundos
             preAllocatedVUs: 1,                // VUs (Virtual Users) preasignados para atender la carga
@@ -17,7 +17,7 @@ export const options = {
     },
     thresholds: {
         // Define umbrales para fallar el test si no se cumplen
-        'http_req_duration': ['p(95)<500'], // El 95% de las peticiones debe responder en < 500 ms
+        'http_req_duration': ['p(95)<500'],  // El 95% de las peticiones debe responder en < 500 ms
         'http_req_failed': ['rate<0.01'],    // La tasa de peticiones fallidas debe ser < 1%
     },
 };
@@ -33,7 +33,8 @@ export function user_api() {
 
     // Enviar una petición GET al endpoint con los parámetros
     const res = http.get(url, params);
-    
+    //console.log(res.body)
+
     // Validación: comprueba que el cuerpo ('body') contenga la palabra 'username'
     // Si falla, se cuenta como un chequeo fallido
     check(res, {
